@@ -253,18 +253,17 @@ bool nxsched_add_readytorun(FAR struct tcb_s *btcb)
 
   btcb->task_state = TSTATE_TASK_READYTORUN;
 
-  if (nxsched_add_prioritized(btcb, list_readytorun()))
-    {
-      int target_cpu = nxsched_select_cpu(btcb->affinity);
-      if (target_cpu < CONFIG_SMP_NCPUS)
-        {
-          FAR struct tcb_s *tcb = current_task(target_cpu);
+  nxsched_add_prioritized(btcb, list_readytorun());
 
-          if (tcb->sched_priority < btcb->sched_priority)
-            {
-              doswitch = nxsched_deliver_task(this_cpu(), target_cpu,
+  int target_cpu = nxsched_select_cpu(btcb->affinity);
+  if (target_cpu < CONFIG_SMP_NCPUS)
+    {
+      FAR struct tcb_s *tcb = current_task(target_cpu);
+
+      if (tcb->sched_priority < btcb->sched_priority)
+        {
+          doswitch = nxsched_deliver_task(this_cpu(), target_cpu,
                                               SWITCH_HIGHER);
-            }
         }
     }
 
