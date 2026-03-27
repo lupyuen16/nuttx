@@ -28,6 +28,7 @@ on:
       - "Documentation/**"
     branches:
       - "releases/*"
+      - improvement/xtensa_ci_job_split
     tags:
 
 permissions:
@@ -97,8 +98,8 @@ jobs:
       - name: Checkout nuttx repo
         uses: actions/checkout@v6
         with:
-          repository: apache/nuttx
-          ref: ${{ steps.gittargets.outputs.os_ref }}
+          repository: lupyuen16/nuttx
+          ref: improvement/xtensa_ci_job_split
           path: sources/nuttx
           fetch-depth: 1
       - name: Checkout nuttx repo tags
